@@ -1,0 +1,118 @@
+CREATE TABLE IF NOT EXISTS users(
+    userid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name VARCHAR (255) NULL,
+    lastname VARCHAR (255) NULL,
+    enrolled BOOLEAN NULL DEFAULT FALSE,
+    active BOOLEAN NULL DEFAULT FALSE,
+    birthdate DATE NULL,
+    age INT (3) NULL,
+    role VARCHAR (255) NULL,
+    carrer VARCHAR(255) NULL,
+    grade VARCHAR(255) NULL,
+    created_date DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS subjects(
+    subjectid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name VARCHAR (255) NULL,
+    credits INT (3) NULL,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL
+);
+
+CREATE TABLE IF NOT EXISTS subject_user(
+    subjectuserid  INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    subjectid INT(10) NOT NULL ,
+    userid INT(10) NOT NULL ,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL,
+    FOREIGN KEY (subjectid) REFERENCES subjects(subjectid) ON DELETE CASCADE,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS homeworks(
+    homeworkid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    title VARCHAR (255) NULL,
+    delivery_date DATE NULL ,
+    description VARCHAR (255),
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL
+
+);
+
+CREATE TABLE IF NOT EXISTS subject_homework(
+    subjecthomeworkid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    homeworkid INT(10) NOT NULL,
+    subjectid INT(10) NOT NULL ,
+    userid INT(10) NOT NULL ,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL,
+    FOREIGN KEY (subjectid) REFERENCES subjects(subjectid) ON DELETE CASCADE,
+    FOREIGN KEY (homeworkid) REFERENCES homeworks(homeworkid) ON DELETE CASCADE,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
+
+);
+
+CREATE TABLE IF NOT EXISTS units(
+    unitid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    title VARCHAR (255),
+    description VARCHAR (255) ,
+    subjectid INT(10) NOT NULL ,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL,
+    FOREIGN KEY (subjectid) REFERENCES subjects(subjectid) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS resources(
+    resourceid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    description VARCHAR(255),
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL,
+    homeworkid INT(10) NOT NULL,
+    subjectid INT(10) NOT NULL ,
+    FOREIGN KEY (subjectid) REFERENCES subjects(subjectid) ON DELETE CASCADE,
+    FOREIGN KEY (homeworkid) REFERENCES homeworks(homeworkid) ON DELETE CASCADE);
+
+
+CREATE TABLE IF NOT EXISTS privileges(
+    privilegesid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    type VARCHAR (255) NULL,
+    description VARCHAR(255) NULL,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL,
+    userid INT(10) NOT NULL ,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE);
+    
+    CREATE TABLE IF NOT EXISTS payment(
+    paymentid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    description VARCHAR(255) NULL,
+    start_date DATETIME NULL,
+    final_date DATETIME NULL,
+    amount INT (6) NULL,
+    extratime_charge BOOLEAN DEFAULT false,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL
+    );
+    
+    CREATE TABLE IF NOT EXISTS pay_method(
+    paymethodid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    description VARCHAR(255) NULL,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL
+    );
+    
+    
+ CREATE TABLE IF NOT EXISTS user_pay(
+    userpayid INT (10) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    user_pay_date DATE NULL,
+    amount INT(6) NULL,
+    reference VARCHAR(255) NULL,
+    paymethodid INT(10) NOT NULL,
+    created_date DATETIME DEFAULT NOW(),
+    created_by_id VARCHAR (10) NULL,
+    userid INT(10) NOT NULL ,
+    paymentid INT(10) NOT NULL,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
+    FOREIGN KEY (paymentid) REFERENCES payment(paymentid) ON DELETE CASCADE,
+    FOREIGN KEY (paymethodid) REFERENCES pay_method(paymethodid) ON DELETE CASCADE);
