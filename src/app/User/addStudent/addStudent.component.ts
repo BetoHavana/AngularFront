@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
-import { Persona } from 'src/app/Model/Persona';
+import { User} from 'src/app/Model/Users';
 
 @Component({
-  selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  selector: 'app-addStudent',
+  templateUrl: './addStudent.component.html',
+  styleUrls: ['./addStudent.component.css']
 })
-export class AddComponent implements OnInit {
+export class AddStudentComponent implements OnInit {
 
-  persona:Persona=new Persona();
+  user: User = new User();
   constructor(private router:Router, private service:ServiceService) { }
 
   ngOnInit() {
   }
 
-  Guardar(){
-    this.service.createPersona(this.persona)
+  SaveStudent(){
+    this.service.createUsuario(this.user)
     .subscribe(data=>{
-      alert("Se Agrego con Exito...!!!");
+      alert("User Added");
       this.router.navigate(["listar"]);
     })
   }
